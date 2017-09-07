@@ -30,7 +30,7 @@
         <!-- breadcrumb -->
         <div class="row wrapper border-bottom white-bg page-heading">
             <div class="col-lg-10">
-                <h2>Grid Options - based on Bootstrap Grid system overview</h2>
+                <h2><?php echo isset( $sub ) ? $sub['title'] : ''; ?> - <?php echo isset( $sub ) ? $sub['sub_title'] : ''; ?></h2>
                 <ol class="breadcrumb">
                     
                 </ol>

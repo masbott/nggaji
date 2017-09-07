@@ -6,7 +6,6 @@
 */
 class Bonus extends CI_Controller
 {
-	
 	function __construct()
 	{
 		parent::__construct();
@@ -32,7 +31,6 @@ class Bonus extends CI_Controller
 
 			$jumlah = array();
 			$kriteria_nilai = 0;
-			$post_nilai = $this->input->post('nilai_');
 			$i = 1;
 			while ( isset( $_POST['nilai_'.$i] ) ) {
 				$jumlah[]  = $_POST['nilai_'.$i];
@@ -59,8 +57,8 @@ class Bonus extends CI_Controller
 				$persen = 4;
 				$id_persentase = 5;
 			}
-			//hitung nilai bonus 
-			$bonus_nilai = ( $persen * 1737600 ) / 100;
+			//hitung nilai bonus hasil persen kalo UMR / 100
+			$bonus_nilai = ( $persen * 1373600 ) / 100;
 
 			//
 			$cek_d_bonus = $this->bonus->cek_ketersediaan( $tahun , $bulan , $id_karyawan );
@@ -87,13 +85,14 @@ class Bonus extends CI_Controller
 			$this->data['hasil_bonus'] = $bonus_nilai;
 		}
 		
-		
+		$this->data['sub'] = ['title' => __CLASS__ , 'sub_title' => 'Hitung Bonus'];
 		$this->data['kriteria'] = $kriteria;
 		$this->data['content'] = 'bonus/index';
 		$this->load->view( 'layout/main' , $this->data );
 	}
 
 	function daftar() {
+		$this->data['sub'] = ['title' => __CLASS__ , 'sub_title' => ucwords( strtolower( __FUNCTION__ ) ) . ' '.  __CLASS__ ];
 		$this->load->model( 'm_bonus' , 'bonus' );
 		$this->data['daftar'] = $this->bonus->daftar_bonus();
 		$this->data['content'] = 'bonus/daftar';
