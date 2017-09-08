@@ -169,4 +169,29 @@ class Master_data extends CI_Controller
 		header("Content-type:application/json");
 		echo json_encode($return);
 	}
+
+	function nilai_kriteria( $param = '' , $key = null ) {
+		if ( $this->input->post('submit') ) {
+			$insert = array(
+								'id_kriteria' => $this->input->post('kriteria'),
+								'nama_nilai_kriteria' => $this->input->post('nama_sub_kriteria'),
+								'nilai_kriteria' => $this->input->post('nilai')
+							);
+			$this->db->insert( 'm_nilai_kriteria', $insert );
+			$this->session->set_flashdata( 'success', 'Berhasil menyimpan data.');
+			redirect( 'master_data/nilai_kriteria' );
+		}
+
+		//hapus data nilai kriteria
+		if ( $param == 'delete' ) {
+			$this->db->where('id_nilai_kriteria', $key)->delete( 'm_nilai_kriteria' );
+			$this->session->set_flashdata( 'success', 'Berhasil menghapus data.');
+			redirect( 'master_data/nilai_kriteria' );
+		}
+		$this->load->model( 'm_master_data' , 'master_data' );
+		$this->data['kriteria'] = $this->db->get( 'm_kriteria' );
+		$this->data['sub'] = [ 'title' => ucwords( strtolower( str_replace('_', ' ', __CLASS__) ) ) , 'sub_title' => ucwords( str_replace('_', ' ',  strtolower( __FUNCTION__ ) )  ) ];
+		$this->data['content'] = 'master_data/nilai_kriteria';
+		$this->load->view( 'layout/main', $this->data );	
+	}
 }

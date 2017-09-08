@@ -14,7 +14,7 @@ class Bonus extends CI_Controller
 	function index() {
 		$this->load->model( 'm_bonus' , 'bonus' );
 		$this->data['karyawan'] = $this->db->get( 'm_karyawan' );
-		$get_kriteria = $this->bonus->get_kriteria();
+		$get_kriteria = $this->db->get('m_kriteria');
 		$kriteria = array();
 		foreach ( $get_kriteria->result() as $key => $k ) {
 			$kriteria[$k->id_kriteria]['id_kriteria'] = $k->id_kriteria;
@@ -86,7 +86,7 @@ class Bonus extends CI_Controller
 		}
 		
 		$this->data['sub'] = ['title' => __CLASS__ , 'sub_title' => 'Hitung Bonus'];
-		$this->data['kriteria'] = $kriteria;
+		$this->data['kriteria'] = $get_kriteria;
 		$this->data['content'] = 'bonus/index';
 		$this->load->view( 'layout/main' , $this->data );
 	}

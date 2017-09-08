@@ -52,6 +52,7 @@
             <table class="table table-bordered table-striped" width="100%">
                 <thead>
                     <tr>
+                        <th width="2%">#</th>
                         <th class="text-center" width="15%">
                             Kriteria / Sub Kriteria
                         </th>
@@ -64,23 +65,25 @@
                     </tr>
                 </thead>
                 <tbody>
-                <?php $n = 1; foreach( $kriteria as $k ): ?>
+                <?php $n = 1; foreach( $kriteria->result() as $k ): ?>
                     <tr>
-                        <td colspan="3"><?php echo $n++ . '. '. $k['kriteria'] ?></td>
+                        <td class="text-center"><?php echo $n++ ?></td>
+                        <td colspan="3"><?php echo $k->nama_kriteria ?></td>
                     </tr>
-                    <?php $param = $k['id_kriteria']; 
+                    <?php 
                     $sub = $this->db->query("SELECT a.* , b.*
-                                                   FROM m_trans_kriteria_nilai a 
-                                                   INNER JOIN m_nilai_kriteria b ON a.id_nilai_kriteria = b.id_nilai_kriteria 
-                                                   WHERE a.id_kriteria='.$param.' "); ?>
+                                                   FROM m_nilai_kriteria a 
+                                                   INNER JOIN m_kriteria b ON a.id_kriteria = b.id_kriteria 
+                                                   WHERE a.id_kriteria=$k->id_kriteria "); ?>
                     <?php $m = 1; foreach( $sub->result() as $s ): ?>
                         <tr>
+                            <td></td>
                             <td><?php echo $m++ .'. '. $s->nama_nilai_kriteria; ?></td>
                             <td class="text-center"><?php echo $s->nilai_kriteria; ?></td>
                             <td>
                                 <div class="radio text-center">
                                   <label>
-                                    <input type="radio" required="" name="nilai_<?php echo $param ?>" value="<?php echo $s->nilai_kriteria ?>">
+                                    <input type="radio" required="" name="nilai_<?php echo $k->id_kriteria ?>" value="<?php echo $s->nilai_kriteria ?>">
                                   </label>
                                 </div>
                             </td>

@@ -54,7 +54,7 @@
                     <li><a href="<?php echo site_url('master_data/jabatan') ?>">Jabatan</a></li>
                     <li><a href="<?php echo site_url('master_data/karyawan') ?>">Karyawan</a></li>
                     <li><a href="<?php echo site_url('master_data/kriteria') ?>">Kriteria</a></li>
-                    <li><a href="dashboard_4_1.html">Dashboard v.4</a></li>
+                    <li><a href="<?php echo site_url('master_data/nilai_kriteria') ?>">Nilai Kriteria</a></li>
                 </ul>
             </li>
         </ul>
