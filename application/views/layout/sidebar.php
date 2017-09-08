@@ -51,8 +51,9 @@
             <li>
                 <a href="index.html"><i class="fa fa-th-large"></i> <span class="nav-label">Master Data</span> <span class="fa arrow"></span></a>
                 <ul class="nav nav-second-level">
+                    <li><a href="<?php //echo site_url('master_data/jabatan') ?>">Jabatan</a></li>
                     <li><a href="<?php echo site_url('master_data/karyawan') ?>">Karyawan</a></li>
-                    <li><a href="dashboard_2.html">Dashboard v.2</a></li>
+                    
                     <li><a href="dashboard_3.html">Dashboard v.3</a></li>
                     <li><a href="dashboard_4_1.html">Dashboard v.4</a></li>
                 </ul>

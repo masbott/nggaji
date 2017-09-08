@@ -46,7 +46,11 @@
             <hr>
             
             <?php if( $this->session->flashdata('success') ): ?>
-                <div class="alert alert-success" role="alert"><?php echo $this->session->flashdata('success'); ?></div>
+                <div class="alert alert-success" role="alert"> <strong>Sukses!</strong> <?php echo $this->session->flashdata('success'); ?></div>
+            <?php endif; ?>
+
+            <?php if( $this->session->flashdata('failed') ): ?>
+                <div class="alert alert-danger" role="alert"> <strong>Peringatan!</strong> <?php echo $this->session->flashdata('failed'); ?></div>
             <?php endif; ?>
             
             <div class="row">
@@ -56,22 +60,18 @@
                     <table class="table table-bordered table-striped" width="100%">
                         <thead>
                             <tr>
-                                <th class="text-center" rowspan="2">
+                                <th class="text-center">
                                     No
                                 </th>
-                                <th class="text-center" rowspan="2">
+                                <th class="text-center">
                                     Tunjangan
                                 </th>
-                                <th class="text-center" rowspan="2">
+                                <th class="text-center">
                                     Nilai
                                 </th>
-                                <th class="text-center" colspan="2">
+                                <th class="text-center">
                                     Pilih
                                 </th>
-                            </tr>
-                            <tr>
-                                <th class="text-center">Ya</th>
-                                <th class="text-center">Tidak</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -80,12 +80,9 @@
                                     <tr>
                                         <td></td>
                                         <td><?php echo $t->nama_tunjangan ?></td>
-                                        <td class="text-right"><?php echo 'Rp.' . number_format( $t->nilai_tunjangan , 2 , ',' , '.' ) ?></td>
+                                        <td class="text-right"><?php echo 'Rp. '. number_format( $t->nilai_tunjangan , 2 , ',' , '.' ) ?></td>
                                         <td class="text-center">
-                                            <input type="radio" name="tunjangan_<?php echo $t->id_tunjangan ?>" id="optionsRadios1" value="1">
-                                        </td>
-                                        <td class="text-center">
-                                            <input type="radio" name="tunjangan_<?php echo $t->id_tunjangan ?>" id="optionsRadios1" value="0">
+                                            <input type="checkbox" name="tunjangan[]" value="<?php echo $t->id_tunjangan ?>">
                                         </td>
                                     </tr>
                                 <?php endforeach; ?>
@@ -99,22 +96,18 @@
                     <table class="table table-bordered table-striped" width="100%">
                         <thead>
                             <tr>
-                                <th class="text-center" rowspan="2">
+                                <th class="text-center">
                                     No
                                 </th>
-                                <th class="text-center" rowspan="2">
+                                <th class="text-center">
                                     Potongan
                                 </th>
-                                <th class="text-center" rowspan="2">
+                                <th class="text-center">
                                     Nilai
                                 </th>
-                                <th class="text-center" colspan="2">
+                                <th class="text-center">
                                     Pilih
                                 </th>
-                            </tr>
-                            <tr>
-                                <th class="text-center">Ya</th>
-                                <th class="text-center">Tidak</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -123,12 +116,9 @@
                                     <tr>
                                         <td></td>
                                         <td><?php echo $p->nama_potongan ?></td>
-                                        <td class="text-right"><?php echo 'Rp. ' . number_format( $p->nilai_potongan , 2 , ',' , '.' ); ?></td>
+                                        <td class="text-right" class="nilai_potongan"><?php echo 'Rp. ' . number_format( $p->nilai_potongan , 2 , ',' , '.' ); ?></td>
                                         <td class="text-center">
-                                            <input type="radio" name="potongan_<?php echo $p->id_potongan; ?>" value="1">
-                                        </td>
-                                        <td class="text-center">
-                                            <input type="radio" name="potongan_<?php echo $p->id_potongan; ?>" value="0">
+                                            <input type="checkbox" name="potongan[]" value="<?php echo $p->id_potongan ?>">
                                         </td>
                                     </tr>
                                 <?php endforeach; ?>
@@ -138,21 +128,20 @@
                 </div>
 
             </div>            
-            
-            <button type="submit" class="btn btn-sm btn-primary" id="hitung" name="hitung_bonus" value="Hitung">Hitung</button>
+            <input type="submit" class="btn btn-sm btn-primary" name="hitung_bonus" value="Hitung">
             <input type="hidden" name="id_karyawan">
             </form>
         </div>
     </div>
 </div>
-
+<?php //print_r( isset( $cek_tunjangan) ? $cek_tunjangan : '' ); ?>
 <?php 
-    if( $this->input->post('hitung') && $jumlah_data->num_rows() != 1 ): 
+    if( $this->input->post('hitung_bonus') ): 
 ?>
 <div class="col-lg-12">
     <div class="ibox float-e-margins">
         <div class="ibox-title">
-            <h5>Hasil Perhitungan Bonus</h5>
+            <h5>Hasil Perhitungan Gaji</h5>
             <div class="ibox-tools">
                 <a class="collapse-link">
                     <i class="fa fa-chevron-up"></i>
@@ -175,38 +164,35 @@
             <table class="table table-striped">
                     <thead>
                         <tr>
-                            <td>NIK</td>
-                            <td>:</td>
-                            <td><?php echo isset( $getone_karyawan->NIK ) ? $getone_karyawan->NIK : ''; ?></td>
-                        </tr> 
-                        <tr>
+                            <td width="20%">NIK</td>
+                            <td width="5%">:</td>
+                            <td><?php echo isset( $kar_jab ) ? $kar_jab->row()->NIK : ''; ?></td>
                             <td>Nama Karyawan</td>
                             <td>:</td>
-                            <td><?php echo isset( $getone_karyawan->nama_karyawan ) ? $getone_karyawan->nama_karyawan : ''; ?></td>
-                        </tr>
+                            <td><?php echo isset( $kar_jab ) ? $kar_jab->row()->nama_karyawan : ''; ?></td>
+                        </tr> 
                         <tr>
-                            <td>Total Nilai Kriteria</td>
+
+                            <td>Nomor Telepon</td>
                             <td>:</td>
-                            <td><?php echo $n_kriteria; ?></td>
+                            <td><?php echo isset( $kar_jab ) ? $kar_jab->row()->no_telepon : ''; ?></td>
+
+                            <td>Periode</td>
+                            <td>:</td>
+                            <td><?php echo date_translate(date('F Y' , strtotime(date('d-m-Y')))) ?></td>
+
                         </tr>
+
                         <tr>
-                            <td>Kriteria Persentase</td>
+                            <td>Gaji Pokok</td>
                             <td>:</td>
-                            <td><?php echo $n_persentase; ?> %</td>
-                        </tr>
-                        <tr>
-                            <td>Perhitungan Bonus</td>
-                            <td>:</td>
-                            <td> Rp. 1.737.600,00 (UMR) x Kriteria Persentase (%) </td>
-                        </tr>
-                        <tr>
-                            <td>Hasil Perhitungan Bonus</td>
-                            <td>:</td>
-                            <td>
-                                <strong><?php echo 'Rp. '. number_format( $hasil_bonus , 2 , ',' , '.' ); ?></strong> 
-                            </td>
+                            <td><?php echo isset( $getone_jabatan ) ? 'Rp. ' . number_format( $getone_jabatan->row()->gaji_pokok , 2 , ',' , '.' ) : ''; ?></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
                         </tr>
                     </thead>
+
             </table>
         </div>
     </div>

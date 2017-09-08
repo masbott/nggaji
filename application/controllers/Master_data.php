@@ -77,4 +77,53 @@ class Master_data extends CI_Controller
 		header("Content-type:application/json");
 		echo json_encode($return);
 	}
+
+	function jabatan( $param = '' , $key = null ) {
+		//tambah data jabatan
+		if ( $this->input->post('submit') ) {
+			$insert = array(
+							'nama_jabatan' => $this->input->post('nama_jabatan'),
+							'gaji_pokok'   => $this->input->post('gaji_pokok')
+							);
+			$this->db->insert( 'm_jabatan', $insert );
+			$this->session->set_flashdata( 'success', 'Berhasil menginputkan data.');
+			redirect( 'master_data/jabatan' );
+		}
+
+		//hapus data jabatan
+		if ( $param == 'delete' ) {
+			$this->db->where( 'id_jabatan', $key)->delete( 'm_jabatan' );	
+			$this->session->set_flashdata( 'success', 'Berhasil menghapus data.');
+			redirect( 'master_data/jabatan' );
+		}
+
+		//edit data jabatan
+		if ( $this->input->post('submit_edit') ) {
+			$edit = array(
+							'nama_jabatan' => $this->input->post('nama_jabatan'),
+							'gaji_pokok'   => $this->input->post('gaji_pokok')
+						);
+			$this->db->where( 'id_jabatan', $this->input->post('id_jabatan'))->update( 'm_jabatan' , $edit );
+			$this->session->set_flashdata( 'success', 'Berhasil menyimpan data.');
+			redirect( 'master_data/jabatan' );
+		}
+
+		//tampil data jabatan
+		$this->data['jabatan'] = $this->db->get( 'm_jabatan' );
+		$this->data['sub'] = [ 'title' => ucwords( strtolower( str_replace('_', ' ', __CLASS__) ) ) , 'sub_title' => ucwords( strtolower( __FUNCTION__ ) ) ];
+		$this->data['content'] = 'master_data/jabatan';
+		$this->load->view( 'layout/main', $this->data );
+	}
+
+	function edit_jabatan() {
+		$return = array();
+		
+		if ( $this->input->post() ) {
+			$id = $this->input->post('id');
+			$getone_jabatan = $this->db->get_where( 'm_jabatan' , array( 'id_jabatan' => $id ) );
+			$return = array( 'id_jabatan' => $getone_jabatan->row()->id_jabatan , 'nama_jabatan' => $getone_jabatan->row()->nama_jabatan , 'gaji_pokok' => $getone_jabatan->row()->gaji_pokok );
+		}
+		header("Content-type:application/json");
+		echo json_encode($return);
+	}
 }
