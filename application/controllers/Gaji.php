@@ -84,11 +84,6 @@ class Gaji extends CI_Controller
 		$tunjangan = $this->db->get( 'd_tunjangan' );
 		$potongan  = $this->db->get( 'd_potongan' );
 
-		foreach ( $tunjangan->result() as $t) {
-			$tun[$t->id_karyawan]['karyawan'] = $t->id_karyawan;
-			$tun[$t->id_karyawan]['jml'] += $t->id_tunjangan;
-		}
-		print_r($tun);exit();
 		$this->data['sub'] = ['title' => __CLASS__ , 'sub_title' => ucwords( strtolower( __FUNCTION__ ) ) . ' '.  __CLASS__ ];
 		$this->data['content'] = 'gaji/daftar';
 		$this->load->view( 'layout/main', $this->data );

@@ -126,4 +126,47 @@ class Master_data extends CI_Controller
 		header("Content-type:application/json");
 		echo json_encode($return);
 	}
+
+	function kriteria( $param = '' , $key = null ) {
+		//tambah data kriteria
+		if ( $this->input->post('submit') ) {
+			$insert = array(
+								'nama_kriteria' => $this->input->post('nama_kriteria')
+							);
+			$this->db->insert( 'm_kriteria', $insert );
+			$this->session->set_flashdata( 'success', 'Berhasil menginputkan data.');
+			redirect( 'master_data/kriteria' );
+		}
+		//hapus data kriteria
+		if ( $param == 'delete' ) {
+			$this->db->where( 'id_kriteria', $key )->delete( 'm_kriteria' );
+			$this->session->set_flashdata( 'success', 'Berhasil menghapus data.');
+			redirect( 'master_data/kriteria' );
+		}
+
+		//edit data kriteria
+		if ( $this->input->post('submit_edit') ) {
+			$edit = array( 'nama_kriteria' => $this->input->post('nama_kriteria') );
+			$this->db->where( 'id_kriteria', $this->input->post('id_kriteria'))->update( 'm_kriteria' , $edit );
+			$this->session->set_flashdata( 'success', 'Berhasil menyimpan data.');
+			redirect( 'master_data/kriteria' );
+		}
+		//tampil data kriteria
+		$this->data['kriteria'] = $this->db->get( 'm_kriteria' );
+		$this->data['sub'] = [ 'title' => ucwords( strtolower( str_replace('_', ' ', __CLASS__) ) ) , 'sub_title' => ucwords( strtolower( __FUNCTION__ ) ) ];
+		$this->data['content'] = 'master_data/kriteria';
+		$this->load->view( 'layout/main', $this->data );
+	}
+
+	function getone_kriteria() {
+		$return = array();
+		if ( $this->input->post() ) {
+			$id = $this->input->post('id');
+			
+			$getone_kriteria = $this->db->get_where( 'm_kriteria' , array('id_kriteria' => $id ) );
+			$return = array( 'id_kriteria' => $getone_kriteria->row()->id_kriteria , 'nama_kriteria' => $getone_kriteria->row()->nama_kriteria );
+		}
+		header("Content-type:application/json");
+		echo json_encode($return);
+	}
 }
