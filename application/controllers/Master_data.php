@@ -49,12 +49,43 @@ class Master_data extends CI_Controller
 			$this->session->set_flashdata( 'success', 'Berhasil menyimpan data.');
 			redirect( 'master_data/karyawan' );
 		}
-
+		$this->data['tunjangan'] = $this->db->get( 'm_tunjangan' );
 		$this->data['jabatan'] = $this->db->get( 'm_jabatan' );
 		$this->data['get_data'] = $this->master_data->get_karyawan();
 		$this->data['sub'] = [ 'title' => ucwords( strtolower( str_replace('_', ' ', __CLASS__) ) ) , 'sub_title' => ucwords( strtolower( __FUNCTION__ ) ) ];
 		$this->data['content'] = 'master_data/karyawan';
 		$this->load->view( 'layout/main' , $this->data );
+	}
+
+	function getone_tunjangan() {
+		$return = array();
+		if ( $this->input->post() ) {
+			$id = $this->input->post('id');
+			$getone = $this->db->get_where( 'd_karyawan_tunjangan' , array( 'id_karyawan' => $id ) );
+			if ( $getone->num_rows() > 0 ) {
+				foreach ( $getone->result() as $tunjangan ) {
+					$tunjangans[] = $tunjangan->id_tunjangan;
+				}
+			} else {
+				$tunjangans = null;
+			}
+
+			$data_tunjangan = $this->db->get( 'm_tunjangan' );
+
+			if ( $data_tunjangan->num_rows() > 0 ) {
+				foreach ( $data_tunjangan->result() as $t ) {
+					$d_tunjangan[]	= $t->id_tunjangan;
+				}	
+			} else {
+				$d_tunjangan = null;
+			}
+
+			$get_pegawai = $this->db->get_where('m_karyawan' , array('id_karyawan' => $id));
+			$return = array( 'tunjangan' => $tunjangans , 'master' => $d_tunjangan , 'nik' => $get_pegawai->row()->NIK , 'nama_pegawai' => $get_pegawai->row()->nama_karyawan );
+		}
+
+		header("Content-type:application/json");
+		echo json_encode($return);
 	}
 
 	function edit_karyawan() {
@@ -194,5 +225,24 @@ class Master_data extends CI_Controller
 		$this->data['sub'] = [ 'title' => ucwords( strtolower( str_replace('_', ' ', __CLASS__) ) ) , 'sub_title' => ucwords( str_replace('_', ' ',  strtolower( __FUNCTION__ ) )  ) ];
 		$this->data['content'] = 'master_data/nilai_kriteria';
 		$this->load->view( 'layout/main', $this->data );	
+	}
+
+	function tunjangan() {
+		//insert data
+		if ( $this->input->post('submit') ) {
+			$insert = array(
+							'nama_tunjangan' => $this->input->post('nama_tunjangan'),
+							'nilai_tunjangan' => $this->input->post('nilai')
+							);
+			$this->db->insert( 'm_tunjangan', $insert );
+			$this->session->set_flashdata( 'success', 'Berhasil menyimpan data.');
+			redirect( 'master_data/tunjangan' );
+		}
+
+		//tampil data
+		$this->data['get_data'] = $this->db->get( 'm_tunjangan' );
+		$this->data['sub'] = [ 'title' => ucwords( strtolower( str_replace('_', ' ', __CLASS__) ) ) , 'sub_title' => ucwords( str_replace('_', ' ',  strtolower( __FUNCTION__ ) )  ) ];
+		$this->data['content'] = 'master_data/tunjangan';
+		$this->load->view( 'layout/main', $this->data );
 	}
 }

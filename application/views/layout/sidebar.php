@@ -42,7 +42,7 @@
                 <ul class="nav nav-second-level">
                     <li><a href="<?php echo site_url('master_data/jabatan') ?>">Jabatan</a></li>
                     <li><a href="<?php echo site_url('master_data/karyawan') ?>">Karyawan</a></li>
-                    <li><a href="">Tunjangan</a></li>
+                    <li><a href="<?php echo site_url('master_data/tunjangan') ?>">Tunjangan</a></li>
                     <li><a href="">Potongan</a></li>
                 </ul>
             </li>
