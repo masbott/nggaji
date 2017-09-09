@@ -12,6 +12,7 @@ class Master_data extends CI_Controller
 	}
 
 	function  karyawan( $param = '' , $key = null ) {
+		$this->load->model('m_master_data' , 'master_data' );
 		//tambah data karyawan
 		if ( $this->input->post('submit') ) {
 			$karyawan = array( 
@@ -50,7 +51,7 @@ class Master_data extends CI_Controller
 		}
 
 		$this->data['jabatan'] = $this->db->get( 'm_jabatan' );
-		$this->data['get_data'] = $this->db->get( 'm_karyawan' );
+		$this->data['get_data'] = $this->master_data->get_karyawan();
 		$this->data['sub'] = [ 'title' => ucwords( strtolower( str_replace('_', ' ', __CLASS__) ) ) , 'sub_title' => ucwords( strtolower( __FUNCTION__ ) ) ];
 		$this->data['content'] = 'master_data/karyawan';
 		$this->load->view( 'layout/main' , $this->data );

@@ -56,7 +56,7 @@
                             <td><?php echo $g->NIK ?></td>
                             <td><?php echo $g->nama_karyawan ?></td>
                             <td><?php echo $jl ?></td>
-                            <td><?php echo $g->id_jabatan ?></td>
+                            <td><?php echo $g->nama_jabatan ?></td>
                             <td><?php echo $g->no_telepon ?></td>
                             <td><?php echo $g->alamat ?></td>
                             <td>
