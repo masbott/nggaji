@@ -62,7 +62,7 @@
                             <td>
                                 <a href="" class="btn btn-xs btn-primary edit" data-id="<?php echo $g->id_karyawan ?>"> <i class="fa fa-pencil"></i> Edit </a>
                                 <a href="<?php echo site_url('master_data/karyawan/delete/'.$g->id_karyawan) ?>" class="btn btn-xs btn-danger" onclick="return confirm('Yakin akan menghapus data ini?')"> <i class="fa fa-trash"></i> Hapus </a>
-                                <a href="" data-id="<?php echo $g->id_karyawan ?>" class="btn btn-xs btn-info detail"><i class="fa fa-eye"></i> Detail</a>
+                                <a href="<?php echo site_url('master_data/tunjangan_karyawan/'.$g->id_karyawan) ?>" class="btn btn-xs btn-info"><i class="fa fa-eye"></i> Detail</a>
                             </td>
                         </tr>
                     <?php endforeach; ?>

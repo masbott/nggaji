@@ -245,4 +245,13 @@ class Master_data extends CI_Controller
 		$this->data['content'] = 'master_data/tunjangan';
 		$this->load->view( 'layout/main', $this->data );
 	}
+
+	function tunjangan_karyawan( $id ) {
+		$this->data['karyawan'] = $this->db->get_where( 'm_karyawan' , array( 'id_karyawan' => $id ) );
+		$this->data['tunjangan'] = $this->db->get( 'm_tunjangan' );
+		$this->data['get_one_tunjangan'] = $this->db->get_where( 'd_karyawan_tunjangan' , array( 'id_karyawan' => $id ) );
+		$this->data['sub'] = [ 'title' => ucwords( strtolower( str_replace('_', ' ', __CLASS__) ) ) , 'sub_title' => ucwords( str_replace('_', ' ',  strtolower( __FUNCTION__ ) )  ) ];
+		$this->data['content'] = 'master_data/tunjangan_karyawan';
+		$this->load->view( 'layout/main', $this->data );	
+	}
 }
