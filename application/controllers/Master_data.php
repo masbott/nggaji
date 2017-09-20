@@ -252,6 +252,7 @@ class Master_data extends CI_Controller
 
 	function tunjangan( $param = null , $key = null ) {
 		//insert data
+
 		if ( $this->input->post('submit') ) {
 			$insert = array(
 							'nama_tunjangan' => $this->input->post('nama_tunjangan'),
