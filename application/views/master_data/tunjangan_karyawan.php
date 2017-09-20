@@ -21,11 +21,15 @@
             </div>
         </div>
         <div class="ibox-content">
-            <form class="form-horizontal">
+            <?php if( $this->session->flashdata('success') ): ?>
+                <div class="alert alert-success" role="alert"><strong>Sukses!</strong> <?php echo $this->session->flashdata('success'); ?></div>
+            <?php endif; ?>
+            <form class="form-horizontal" method="POST">
               <div class="form-group">
                 <label for="inputEmail3" class="col-sm-2 control-label">NIK</label>
                 <div class="col-sm-10">
                   <input type="text" class="form-control" value="<?php echo isset( $karyawan ) ? $karyawan->row()->NIK : ''; ?>" readonly="">
+                  <input type="hidden" name="id_karyawan" value="<?php echo isset( $karyawan ) ? $karyawan->row()->id_karyawan : ''; ?>">
                 </div>
               </div>
               <div class="form-group">
@@ -35,27 +39,28 @@
                 </div>
               </div>
               <div class="form-group">
-                <label for="inputPassword3" class="col-sm-2 control-label">Tunjangan</label>
               </div>
               <div class="form-group">
               <?php if( $tunjangan->num_rows() > 0 ): ?>
-                <?php foreach( $tunjangan->result_array() as $t ): ?>
-                  <label for="inputPassword3" class="col-sm-2 control-label"></label>
-                    <div class="col-sm-10">
+                
+                <label for="inputPassword3" class="col-sm-2 control-label">Tunjangan</label>
+
+                <?php foreach( $tunjangan->result_array() as $index => $t ): ?>
+                  <?php 
+                    if( $get_one_tunjangan->num_rows() > 0 ): 
+                          foreach( $get_one_tunjangan->result_array() as $index => $result_getone ):
+                            $r_g[] = $result_getone['id_tunjangan'];
+                          endforeach;
+                    else:
+                      $r_g = array();
+                    endif;
+                  $select =( in_array( $t['id_tunjangan'] , $r_g )) ? 'checked="checked"' : '';
+                  ?>
+                  
+                    <div class="col-sm-offset-2 col-sm-10">
                       <div class="checkbox">
                         <label>
-                        <?php 
-
-                        if( $get_one_tunjangan->num_rows() > 0 ): 
-                              foreach( $get_one_tunjangan->result_array() as $index => $result_getone ):
-                                $r_g[] = $result_getone['id_tunjangan'];
-                              endforeach;
-                        else:
-                          $r_g = array();
-                        endif;
-                        $select =( in_array( $t['id_tunjangan'] , $r_g )) ? 'checked="checked"' : '';
-                         ?>
-                          <input type="checkbox" <?php echo $select ?>> <?php echo $t['nama_tunjangan'] ?>
+                          <input type="checkbox" name="tunjangan[]" value="<?php echo $t['id_tunjangan'] ?>" <?php echo $select ?>> <?php echo $t['nama_tunjangan'] . ' ( Rp. ' . number_format( $t['nilai_tunjangan'] , 2 , ',' , '.' ) . ' )'; ?>
                         </label>
                       </div>
                     </div>
@@ -64,8 +69,31 @@
               <?php endif;?>
               </div>
               <div class="form-group">
+                <label for="inputPassword3" class="col-sm-2 control-label">Potongan</label>
                 <div class="col-sm-offset-2 col-sm-10">
-                  <button type="submit" class="btn btn-default">Sign in</button>
+                  <?php if( $potongan->num_rows() > 0 ): ?>
+                    <?php foreach( $potongan->result_array() as $p ):
+                      if( $get_one_potongan->num_rows() > 0 ):
+                        foreach( $get_one_potongan->result_array() as $result_potongan ):
+                          $r_p[] = $result_potongan['id_potongan'];
+                        endforeach;
+                      else :
+                        $r_p = array();
+                      endif;
+                      $pilih = (in_array( $p['id_potongan'] , $r_p)) ? 'checked="checked"' : '' ;
+                    ?>
+                      <div class="checkbox">
+                        <label>
+                          <input type="checkbox" name="potongan[]" value="<?php echo $p['id_potongan'] ?>" <?php echo $pilih ?>> <?php echo $p['nama_potongan'] . ' ( Rp. ' . number_format( $p['nilai_potongan'] , 2 , ',' , '.' ) . ' )'; ?>
+                        </label>
+                      </div>
+                    <?php endforeach; ?>
+                  <?php endif; ?>
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                  <input type="submit" class="btn btn-sm btn-primary" name="submit" value="Simpan">
                 </div>
               </div>
             </form>

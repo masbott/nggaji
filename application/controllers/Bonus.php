@@ -22,12 +22,13 @@ class Bonus extends CI_Controller
 		}
 
 		$get_kriteria = $this->db->get('m_kriteria');
-
+		$tgl_sekarang = date('Y-m-d');
+		
 		if ( $this->input->post('hitung') ) {
 			//echo '<pre>'; print_r($this->input->post());exit();
 			$id_karyawan = $this->input->post('karyawan');
 			$tahun = substr($this->input->post('bulan'), 0, 4 );
-			$bulan = substr($this->input->post('bulan'), 5 , 2 );
+			$bulan = substr( str_replace( '-', '', $this->input->post('bulan')) , 4 , 2 );
 
 			$jumlah = array();
 			$kriteria_nilai = 0;
