@@ -182,7 +182,7 @@
                         <tr>
                             <td><strong>Total Gaji</strong></td>
                             <td>:</td>
-                            <td class="text-right"><?php echo 'Rp. <strong> ' .number_format( ($getone_jabatan->row()->gaji_pokok + $jumlah_tunjangan + $jumlah_potongan + $bonus ) , 2 , ',' , '.' ) . '</strong>'; ?></td>
+                            <td class="text-right"><?php echo 'Rp. <strong> ' .number_format( ($getone_jabatan->row()->gaji_pokok + $jumlah_tunjangan - $jumlah_potongan + $bonus ) , 2 , ',' , '.' ) . '</strong>'; ?></td>
                         </tr>
 
                     </thead>
