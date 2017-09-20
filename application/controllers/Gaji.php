@@ -32,34 +32,9 @@ class Gaji extends CI_Controller
 
 			$cek_tunjangan = $this->gaji->cek_ketersediaan_tunjangan( $tahun , $bulan , $karyawan );
 			$cek_potongan = $this->gaji->cek_ketersediaan_potongan( $tahun , $bulan , $karyawan );
-			if ( $cek_tunjangan->num_rows() > 0 ) {
-				// $this->session->set_flashdata( 'failed', 'Data sudah tersedia.');
-				// redirect('gaji');
-			} else {
-				foreach ( $tunjangan as $t ) {
-					$tj = array( 
-									'bulan' => date('Y-m-d') , 
-									'id_tunjangan' => $t , 
-									'id_potongan' => '0',
-									'id_karyawan' => $karyawan  );
-					$this->db->insert( 'd_gaji', $tj );
-				}	
-			}
-
-			if ( $cek_potongan->num_rows() > 0 ) {
-					
-			} else {
-				foreach ( $potongan as $p ) {
-					$pt = array( 
-								'bulan' => date('Y-m-d') , 
-								'id_karyawan' => $karyawan , 
-								'id_potongan' => $p,
-								'id_tunjangan' => '0' );
-					$this->db->insert( 'd_gaji', $pt );
-				}
-				$this->session->set_flashdata( 'success', 'Berhasil menyimpan data.');
-				//redirect('gaji');
-			}
+			
+			$this->data['get_tunjangan_karyawan'] = $this->gaji->tunjangan_karyawan( $karyawan );
+			$this->data['get_potongan_karyawan'] = $this->gaji->potongan_karyawan( $karyawan );
 			$this->data['cek_tunjangan'] = $cek_tunjangan;
 			$this->data['getone_jabatan'] = $this->db->get_where( 'm_jabatan' , array( 'id_jabatan' => $this->data['kar_jab']->row()->id_jabatan ) );
 		}

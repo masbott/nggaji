@@ -29,7 +29,7 @@
                     <?php if( $karyawan->num_rows() > 0 ): ?>
                         <option value="">- PIlih Karyawan -</option>
                         <?php foreach( $karyawan->result() as $k ): ?>
-                            <option value="<?php echo $k->id_karyawan ?>"><?php echo $k->nama_karyawan ?></option>
+                            <option value="<?php echo $k->id_karyawan ?>" <?php if( $this->input->post('karyawan') == $k->id_karyawan ): echo 'selected="selected"'; else : echo ''; endif; ?> ><?php echo $k->nama_karyawan ?></option>
                         <?php endforeach; ?>
                     <?php endif; ?>
                   </select>
@@ -40,9 +40,10 @@
                 <div class="col-sm-10">
                   <input type="text" class="form-control" id="inputPassword3" readonly="" value="<?php echo date_translate(date('F Y' , strtotime(date('d-m-Y')))) ?>">
                   <input type="hidden" name="bulan" value="<?php echo date('Y-m-d H:i:s'); ?>">
+                  <input type="submit" class="btn btn-sm btn-primary" name="hitung_bonus" value="Hitung" style="margin-top: 10px;">
+                  <input type="hidden" name="id_karyawan">
                 </div>
               </div>
-
             <hr>
             
             <?php if( $this->session->flashdata('success') ): ?>
@@ -55,81 +56,7 @@
             
             <div class="row">
                 
-                <div class="col-sm-6">
-
-                    <table class="table table-bordered table-striped" width="100%">
-                        <thead>
-                            <tr>
-                                <th class="text-center">
-                                    No
-                                </th>
-                                <th class="text-center">
-                                    Tunjangan
-                                </th>
-                                <th class="text-center">
-                                    Nilai
-                                </th>
-                                <th class="text-center">
-                                    Pilih
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php if( $d_tunjangan->num_rows() > 0 ): ?>
-                                <?php foreach( $d_tunjangan->result() as $t ): ?>
-                                    <tr>
-                                        <td></td>
-                                        <td><?php echo $t->nama_tunjangan ?></td>
-                                        <td class="text-right"><?php echo 'Rp. '. number_format( $t->nilai_tunjangan , 2 , ',' , '.' ) ?></td>
-                                        <td class="text-center">
-                                            <input type="checkbox" name="tunjangan[]" value="<?php echo $t->id_tunjangan ?>">
-                                        </td>
-                                    </tr>
-                                <?php endforeach; ?>
-                            <?php endif; ?>
-                        </tbody>
-                    </table>
-
-                </div>
-
-                <div class="col-sm-6">
-                    <table class="table table-bordered table-striped" width="100%">
-                        <thead>
-                            <tr>
-                                <th class="text-center">
-                                    No
-                                </th>
-                                <th class="text-center">
-                                    Potongan
-                                </th>
-                                <th class="text-center">
-                                    Nilai
-                                </th>
-                                <th class="text-center">
-                                    Pilih
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php if( $d_potongan->num_rows() > 0 ): ?>
-                                <?php foreach( $d_potongan->result() as $p ): ?>
-                                    <tr>
-                                        <td></td>
-                                        <td><?php echo $p->nama_potongan ?></td>
-                                        <td class="text-right" class="nilai_potongan"><?php echo 'Rp. ' . number_format( $p->nilai_potongan , 2 , ',' , '.' ); ?></td>
-                                        <td class="text-center">
-                                            <input type="checkbox" name="potongan[]" value="<?php echo $p->id_potongan ?>">
-                                        </td>
-                                    </tr>
-                                <?php endforeach; ?>
-                            <?php endif; ?>
-                        </tbody>
-                    </table>
-                </div>
-
             </div>            
-            <input type="submit" class="btn btn-sm btn-primary" name="hitung_bonus" value="Hitung">
-            <input type="hidden" name="id_karyawan">
             </form>
         </div>
     </div>
@@ -184,12 +111,55 @@
                         </tr>
 
                         <tr>
+                            <td colspan="6"></td>
+                        </tr>
+
+
+                        <tr>
                             <td>Gaji Pokok</td>
                             <td>:</td>
-                            <td><?php echo isset( $getone_jabatan ) ? 'Rp. ' . number_format( $getone_jabatan->row()->gaji_pokok , 2 , ',' , '.' ) : ''; ?></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
+                            <td class="text-right"><?php echo isset( $getone_jabatan ) ? 'Rp. ' .'<strong>' . number_format( $getone_jabatan->row()->gaji_pokok , 2 , ',' , '.' ) . '<strong>' : ''; ?></td>
+                        </tr>
+                        <tr>
+                            <td>Tunjangan</td>
+                            <td colspan="2"></td>
+                        </tr>
+                        <?php if( $get_tunjangan_karyawan->num_rows() > 0 ): ?>
+                            <?php $jumlah_tunjangan = 0; ?>
+                            <?php foreach( $get_tunjangan_karyawan->result() as $karyawan_tunjangan ): ?>
+                                <tr>
+                                    <td><?php echo $karyawan_tunjangan->nama_tunjangan ?></td>
+                                    <td>:</td>
+                                    <td class="text-right"><?php echo 'Rp. '. number_format( $karyawan_tunjangan->nilai_tunjangan , 2 , ',' , '.' ) ?></td>
+                                    <?php $jumlah_tunjangan += $karyawan_tunjangan->nilai_tunjangan; ?>
+                                </tr>
+                            <?php endforeach; ?>
+                        <?php else: ?>
+
+                        <?php endif; ?>
+                        <tr>
+                            <td colspan="2"></td>
+                            <td class="text-right"><?php echo 'Rp. '. '<strong>'. number_format( $jumlah_tunjangan , 2 , ',' , '.' ). '</strong>'; ?></td>
+                        </tr>
+
+                        <tr>
+                            <td>Potongan</td>
+                            <td colspan="2"></td>
+                        </tr>
+                        <?php $jumlah_potongan = 0; ?>
+                        <?php if( $get_potongan_karyawan->num_rows() > 0 ): ?>
+                            <?php foreach( $get_potongan_karyawan->result() as $p ): ?>
+                                <tr>
+                                    <td><?php echo $p->nama_potongan ?></td>
+                                    <td>:</td>
+                                    <td class="text-right"><?php echo 'Rp. ' . number_format( $p->nilai_potongan , 2 , ',' , '.' ); ?></td>
+                                    <?php $jumlah_potongan += $p->nilai_potongan; ?>
+                                </tr>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
+                        <tr>
+                            <td colspan="2"></td>
+                            <td class="text-right"><?php echo 'Rp. '. '<strong>' . number_format( $jumlah_potongan , 2 , ',' , '.' ) . '</strong>'; ?></td>
                         </tr>
                     </thead>
 

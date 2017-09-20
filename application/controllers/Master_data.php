@@ -247,9 +247,64 @@ class Master_data extends CI_Controller
 	}
 
 	function tunjangan_karyawan( $id ) {
+		if ( $this->input->post('submit') ) {
+			//echo '<pre>'; print_r($this->input->post());exit();
+			$cek = $this->db->get_where( 'd_karyawan_tunjangan' , array('id_karyawan' => $this->input->post('id_karyawan') ) );
+			$cek_potongan = $this->db->get_where( 'd_karyawan_potongan' , array('id_karyawan' => $this->input->post('id_karyawan') ) );
+			$karyawan = $this->input->post('id_karyawan');
+			$tunjangan = $this->input->post('tunjangan');
+			$potongan = $this->input->post('potongan');
+			if ( $cek->num_rows() > 0 ) {
+				//update
+				$this->db->where( 'id_karyawan', $id)->delete( 'd_karyawan_tunjangan' );
+				for ($i=0; $i < count( $this->input->post('tunjangan')) ; $i++) { 
+					$update = array( 
+										'id_karyawan' => $karyawan, 
+										'id_tunjangan' => $tunjangan[$i]
+									);
+					$this->db->insert( 'd_karyawan_tunjangan', $update );
+				}
+			} else {
+				//insert
+				for ($i=0; $i < count( $this->input->post('tunjangan')) ; $i++) { 
+					$insert = array( 
+										'id_karyawan' => $this->input->post('id_karyawan') , 
+										'id_tunjangan' => $tunjangan[$i] 
+									);
+					$this->db->insert( 'd_karyawan_tunjangan', $insert);
+				}
+			}
+
+			if ( $cek_potongan->num_rows() > 0 ) {
+				//update
+				$this->db->where( 'id_karyawan', $id)->delete( 'd_karyawan_potongan' );
+				for ($i=0; $i < count( $potongan ) ; $i++) { 
+					$update_potongan = array(
+											'id_karyawan' => $this->input->post('id_karyawan'),
+											'id_potongan' => $potongan[$i]
+										);	
+					$this->db->insert( 'd_karyawan_potongan', $update_potongan );
+				}
+			} else {
+				//insert
+				for ($i=0; $i < count( $potongan ) ; $i++) { 
+					$insert_potongan = array(
+											'id_karyawan' => $this->input->post('id_karyawan'),
+											'id_potongan' => $potongan[$i]
+										);	
+					
+					$this->db->insert( 'd_karyawan_potongan', $insert_potongan );
+				}
+				//exit();
+			}
+			$this->session->set_flashdata('success', 'Berhasil menyimpan data');
+			redirect('master_data/tunjangan_karyawan/'.$id );
+		}
+		$this->data['potongan'] = $this->db->get( 'm_potongan' );
 		$this->data['karyawan'] = $this->db->get_where( 'm_karyawan' , array( 'id_karyawan' => $id ) );
 		$this->data['tunjangan'] = $this->db->get( 'm_tunjangan' );
 		$this->data['get_one_tunjangan'] = $this->db->get_where( 'd_karyawan_tunjangan' , array( 'id_karyawan' => $id ) );
+		$this->data['get_one_potongan'] = $this->db->get_where( 'd_karyawan_potongan' , array( 'id_karyawan' => $id ) );
 		$this->data['sub'] = [ 'title' => ucwords( strtolower( str_replace('_', ' ', __CLASS__) ) ) , 'sub_title' => ucwords( str_replace('_', ' ',  strtolower( __FUNCTION__ ) )  ) ];
 		$this->data['content'] = 'master_data/tunjangan_karyawan';
 		$this->load->view( 'layout/main', $this->data );	
