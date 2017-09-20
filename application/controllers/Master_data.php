@@ -269,6 +269,7 @@ class Master_data extends CI_Controller
 			redirect( 'master_data/tunjangan' );
 		}
 
+
 		if ( $this->input->post('submit_edit' ) ) {
 			// echo '<pre>'; print_r($this->input->post());exit();
 			$id = $this->input->post('id_tunjangan');
@@ -281,6 +282,7 @@ class Master_data extends CI_Controller
 			$this->session->set_flashdata( 'success', 'Berhasil menyimpan data.');
 			redirect( 'master_data/tunjangan' );
 		}
+
 
 		//tampil data
 		$this->data['get_data'] = $this->db->get( 'm_tunjangan' );
