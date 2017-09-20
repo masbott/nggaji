@@ -44,7 +44,8 @@
                       <td><?php echo $t->nama_tunjangan ?></td>
                       <td class="text-right"><?php echo 'Rp. '. number_format( $t->nilai_tunjangan , 2 , ',' , '.' ) ?></td>
                       <td class="text-center">
-                          <a href="" class="btn btn-xs btn-primary edit"> <i class="fa fa-pencil"></i> Edit </a>
+
+                          <a href="" class="btn btn-xs btn-primary edit" data-id="<?php echo $t->id_tunjangan ?>"> <i class="fa fa-pencil"></i> Edit </a>
                           <a href="<?php echo site_url('master_data/tunjangan/delete/'.$t->id_tunjangan) ?>" class="btn btn-xs btn-danger" onclick="return confirm('Yakin akan menghapus data ini?')"> <i class="fa fa-trash"></i> Hapus </a>
                       </td>
                     </tr>
@@ -99,61 +100,23 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="myModalLabel">Edit Karyawan</h4>
+        <h4 class="modal-title" id="myModalLabel">Edit Tunjangan</h4>
       </div>
       <div class="modal-body">
-        <form class="form-horizontal" method="POST" action="<?php echo site_url('master_data/karyawan') ?>" >
+        <form class="form-horizontal" method="POST" action="<?php echo site_url('master_data/tunjangan') ?>" >
 
           <div class="form-group">
-            <label for="inputEmail3" class="col-sm-2 control-label">NIK</label>
+            <label for="inputEmail3" class="col-sm-2 control-label">Nama Tunjangan</label>
             <div class="col-sm-10">
-              <input type="text" class="form-control nik" name="nik" placeholder="Masukkan NIK" required="">
+              <input type="text" class="form-control" name="nama_tunjangan" id="nama_tunjangan" placeholder="Nama Tunjangan" required="">
             </div>
           </div>
 
           <div class="form-group">
-            <label for="inputPassword3" class="col-sm-2 control-label">Nama Karyawan</label>
+            <label for="inputPassword3" class="col-sm-2 control-label">Nilai</label>
             <div class="col-sm-10">
-              <input type="text" class="form-control" id="nama_karyawan" name="nama_karyawan" placeholder="Masukkan Nama Karyawan" required="">
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label for="inputPassword3" class="col-sm-2 control-label">Jenis Kelamin</label>
-            <div class="col-sm-10">
-              <div class="radio">
-                  <label>
-                    <input type="radio" name="jenis_kelamin" id="jenis_kelamin" value="L">
-                    Laki-laki
-                  </label>
-                </div>
-                <div class="radio">
-                  <label>
-                    <input type="radio" name="jenis_kelamin" id="jenis_kelamin" value="P">
-                    Perempuan
-                  </label>
-                </div>
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label for="inputPassword3" class="col-sm-2 control-label">Nomor Telepon</label>
-            <div class="col-sm-10">
-              <input type="text" class="form-control nomor_telepon" name="nomor_telepon" placeholder="Masukkan Nomor Telepon" required="">
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label for="inputPassword3" class="col-sm-2 control-label">Alamat</label>
-            <div class="col-sm-10">
-              <textarea class="form-control alamat" cols="10" name="alamat" placeholder="Masukkan Alamat"></textarea>
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label for="inputPassword3" class="col-sm-2 control-label">Jabatan</label>
-            <div class="col-sm-10">
-              
+              <input type="text" class="form-control" name="nilai" id="nilai_tunjangan" placeholder="Masukkan Nilai" required="">
+              <input type="hidden" name="id_tunjangan" id="id_tunjangan">
             </div>
           </div>
         
@@ -161,7 +124,7 @@
       <div class="modal-footer">
         <input type="submit" name="submit" class="btn btn-sm btn-danger" data-dismiss="modal" value="Batal">
         <input type="submit" name="submit_edit" class="btn btn-sm btn-primary" value="Simpan">
-        <input type="hidden" name="id_karyawan" class="id_karyawan">
+        
       </div>
       </form>
     </div>
@@ -169,3 +132,19 @@
 </div>
 <!-- end modal edit karyawan -->
 <script src="<?php echo base_url(); ?>assets/jquery/jquery-2.1.1.js"></script>
+<script type="text/javascript">
+  $('body').on('click' , '.edit' , function(e){
+    var id = $(this).data('id');
+    e.preventDefault();
+      $.post('<?php echo site_url('master_data/getsatu_tunjangan') ?>',
+              {id:id},
+              function(data){
+                $('#nama_tunjangan').val(data.nama_tunjangan);
+                $('#nilai_tunjangan').val(data.nilai_tunjangan);
+                $('#id_tunjangan').val(data.id_tunjangan);
+                $('#myModaledit').modal('show');
+              }
+            );
+    
+  });
+</script>
