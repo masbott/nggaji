@@ -45,7 +45,7 @@
                       <td class="text-right"><?php echo 'Rp. '. number_format( $t->nilai_tunjangan , 2 , ',' , '.' ) ?></td>
                       <td class="text-center">
                           <a href="" class="btn btn-xs btn-primary edit"> <i class="fa fa-pencil"></i> Edit </a>
-                          <a href="" class="btn btn-xs btn-danger" onclick="return confirm('Yakin akan menghapus data ini?')"> <i class="fa fa-trash"></i> Hapus </a>
+                          <a href="<?php echo site_url('master_data/tunjangan/delete/'.$t->id_tunjangan) ?>" class="btn btn-xs btn-danger" onclick="return confirm('Yakin akan menghapus data ini?')"> <i class="fa fa-trash"></i> Hapus </a>
                       </td>
                     </tr>
                   <?php endforeach; ?>
