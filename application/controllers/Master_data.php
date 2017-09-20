@@ -268,11 +268,40 @@ class Master_data extends CI_Controller
 			redirect( 'master_data/tunjangan' );
 		}
 
+		if ( $this->input->post('submit_edit' ) ) {
+			// echo '<pre>'; print_r($this->input->post());exit();
+			$id = $this->input->post('id_tunjangan');
+			$update = array(
+								'nama_tunjangan' => $this->input->post('nama_tunjangan'),
+								'nilai_tunjangan' => $this->input->post('nilai')
+							);
+			
+			$this->db->where( 'm_tunjangan.id_tunjangan', $id)->update( 'm_tunjangan' , $update );
+			$this->session->set_flashdata( 'success', 'Berhasil menyimpan data.');
+			redirect( 'master_data/tunjangan' );
+		}
+
 		//tampil data
 		$this->data['get_data'] = $this->db->get( 'm_tunjangan' );
 		$this->data['sub'] = [ 'title' => ucwords( strtolower( str_replace('_', ' ', __CLASS__) ) ) , 'sub_title' => ucwords( str_replace('_', ' ',  strtolower( __FUNCTION__ ) )  ) ];
 		$this->data['content'] = 'master_data/tunjangan';
 		$this->load->view( 'layout/main', $this->data );
+	}
+
+	function getsatu_tunjangan() {
+		$return = array();
+		if ( $this->input->post() ) {
+			$id = $this->input->post('id');
+			$get = $this->db->get_where( 'm_tunjangan' , array('id_tunjangan' => $id ) );
+
+			$return = array(
+								'id_tunjangan' => $get->row()->id_tunjangan,
+								'nama_tunjangan' => $get->row()->nama_tunjangan,
+								'nilai_tunjangan' => $get->row()->nilai_tunjangan
+							);
+		}
+		header("Content-type:application/json");
+		echo json_encode($return);
 	}
 
 	function tunjangan_karyawan( $id ) {
