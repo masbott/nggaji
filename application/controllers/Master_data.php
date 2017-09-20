@@ -1,7 +1,7 @@
 <?php 
 
 /**
-* 
+* angaaaaaaaa
 */
 class Master_data extends CI_Controller
 {

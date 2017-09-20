@@ -22,10 +22,12 @@
         <div>
             <div>
 
-                <h1 class="logo-name">IN+</h1>
+                <h1 class="logo-name"><img alt="image" class="" src="<?php echo base_url() ?>assets/img/mitra.png" /></h1>
 
             </div>
-            <h3>Welcome NgitungGaji</h3>
+            <h3>Welcome</h3>
+            <h3>SI Penggajian Karyawan</h3>
+            <h3>Koperasi Simpan Pinjam MITRA</h3>
             <p>Login in. To see it in action.</p>
             <form class="m-t" role="form" method="POST" action="<?php echo site_url('sign/proses') ?>">
                 <div class="form-group">
