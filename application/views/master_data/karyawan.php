@@ -141,7 +141,41 @@
               </select>
             </div>
           </div>
-        
+          
+          <div class="form-group">
+            <?php if( $tunjangan->num_rows() > 0 ): ?>
+              
+              <label for="inputPassword3" class="col-sm-2 control-label">Tunjangan</label>
+
+              <?php foreach( $tunjangan->result_array() as $index => $t ): ?>
+                  <div class="col-sm-offset-2 col-sm-10">
+                    <div class="checkbox">
+                      <label>
+                        <input type="checkbox" name="tunjangan[]" value="<?php echo $t['id_tunjangan'] ?>"> <?php echo $t['nama_tunjangan'] . ' ( Rp. ' . number_format( $t['nilai_tunjangan'] , 2 , ',' , '.' ) . ' )'; ?>
+                      </label>
+                    </div>
+                  </div>
+
+              <?php endforeach; ?>
+            <?php endif;?>
+          </div>
+
+          <div class="form-group">
+            <label for="inputPassword3" class="col-sm-2 control-label">Potongan</label>
+            <div class="col-sm-offset-2 col-sm-10">
+              <?php if( $potongan->num_rows() > 0 ): ?>
+                <?php foreach( $potongan->result_array() as $p ): ?>
+                
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" name="potongan[]" value="<?php echo $p['id_potongan'] ?>"> <?php echo $p['nama_potongan'] . ' ( Rp. ' . number_format( $p['nilai_potongan'] , 2 , ',' , '.' ) . ' )'; ?>
+                    </label>
+                  </div>
+                <?php endforeach; ?>
+              <?php endif; ?>
+            </div>
+          </div>
+
       </div>
       <div class="modal-footer">
         <input type="submit" name="submit" class="btn btn-sm btn-danger" data-dismiss="modal" value="Batal">

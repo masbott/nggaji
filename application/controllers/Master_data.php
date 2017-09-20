@@ -24,6 +24,28 @@ class Master_data extends CI_Controller
 								 'id_jabatan'		=> $this->input->post('jabatan')
 							 );
 			$this->db->insert( 'm_karyawan', $karyawan );
+			$last_id = $this->db->insert_id();
+			//print_r($last_id);exit();
+			$tunjangan = $this->input->post('tunjangan');
+			$potongan  = $this->input->post('potongan');
+			$cek_karyawan_tunjangan = $this->db->get_where( 'd_karyawan_tunjangan' , array( 'id_karyawan' => $last_id  ) );
+			$cek_karyawan_potongan = $this->db->get_where( 'd_karyawan_potongan' , array( 'id_karyawan' => $last_id ) );
+			for ($i=0; $i < count( $tunjangan ) ; $i++) { 
+				$tunjangan_insert = array(
+											'id_karyawan' => $last_id,
+											'id_tunjangan' => $tunjangan[$i]
+										 );
+				$this->db->insert( 'd_karyawan_tunjangan', $tunjangan_insert );
+			}	
+
+			for ($i=0; $i < count( $potongan ) ; $i++) { 
+				$potongan_insert = array(
+											'id_karyawan' => $last_id,
+											'id_potongan' => $potongan[$i]
+										);
+				$this->db->insert( 'd_karyawan_potongan', $potongan_insert );
+			}
+			
 			$this->session->set_flashdata( 'success', 'Berhasil menginputkan data.');
 			redirect( 'master_data/karyawan' );
 		}
@@ -49,6 +71,7 @@ class Master_data extends CI_Controller
 			$this->session->set_flashdata( 'success', 'Berhasil menyimpan data.');
 			redirect( 'master_data/karyawan' );
 		}
+		$this->data['potongan'] = $this->db->get( 'm_potongan' );
 		$this->data['tunjangan'] = $this->db->get( 'm_tunjangan' );
 		$this->data['jabatan'] = $this->db->get( 'm_jabatan' );
 		$this->data['get_data'] = $this->master_data->get_karyawan();
@@ -248,7 +271,6 @@ class Master_data extends CI_Controller
 
 	function tunjangan_karyawan( $id ) {
 		if ( $this->input->post('submit') ) {
-			//echo '<pre>'; print_r($this->input->post());exit();
 			$cek = $this->db->get_where( 'd_karyawan_tunjangan' , array('id_karyawan' => $this->input->post('id_karyawan') ) );
 			$cek_potongan = $this->db->get_where( 'd_karyawan_potongan' , array('id_karyawan' => $this->input->post('id_karyawan') ) );
 			$karyawan = $this->input->post('id_karyawan');
