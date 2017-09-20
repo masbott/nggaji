@@ -250,7 +250,7 @@ class Master_data extends CI_Controller
 		$this->load->view( 'layout/main', $this->data );	
 	}
 
-	function tunjangan() {
+	function tunjangan( $param = null , $key = null ) {
 		//insert data
 		if ( $this->input->post('submit') ) {
 			$insert = array(
@@ -259,6 +259,12 @@ class Master_data extends CI_Controller
 							);
 			$this->db->insert( 'm_tunjangan', $insert );
 			$this->session->set_flashdata( 'success', 'Berhasil menyimpan data.');
+			redirect( 'master_data/tunjangan' );
+		}
+
+		if ( $param == 'delete' ) {
+			$this->db->where( 'm_tunjangan.id_tunjangan' ,  $key)->delete( 'm_tunjangan' );
+			$this->session->set_flashdata( 'success', 'Berhasil menghapus data.');
 			redirect( 'master_data/tunjangan' );
 		}
 
