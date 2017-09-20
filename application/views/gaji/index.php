@@ -161,6 +161,30 @@
                             <td colspan="2"></td>
                             <td class="text-right"><?php echo 'Rp. '. '<strong>' . number_format( $jumlah_potongan , 2 , ',' , '.' ) . '</strong>'; ?></td>
                         </tr>
+
+                        <tr>
+                            <td>Bonus</td>
+                            <td colspan="2"></td>
+                        </tr>
+                        <tr>
+                            <td>Jumlah Bonus</td>
+                            <td>:</td>
+                            <?php if( $get_bonus->num_rows() > 0 ): ?>
+                            <?php 
+                                $bonus = $get_bonus->row()->jumlah; 
+                            else:
+                                $bonus = 0;
+                            ?>
+                            <?php endif; ?>
+                            <td class="text-right"><?php echo 'Rp. <strong>' . number_format( $bonus , 2 , ',' , '.' ) . '</strong>'; ?></td>
+                        </tr>
+
+                        <tr>
+                            <td><strong>Total Gaji</strong></td>
+                            <td>:</td>
+                            <td class="text-right"><?php echo 'Rp. <strong> ' .number_format( ($getone_jabatan->row()->gaji_pokok + $jumlah_tunjangan + $jumlah_potongan + $bonus ) , 2 , ',' , '.' ) . '</strong>'; ?></td>
+                        </tr>
+
                     </thead>
 
             </table>

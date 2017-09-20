@@ -52,7 +52,7 @@
                 <li <?php if( $this->uri->segment(1) == 'bonus' ): echo 'class="active"'; endif; ?>>
                     <a href=""><i class="fa fa-diamond"></i> <span class="nav-label">Bonus</span> <span class="fa arrow"></span></a>
                     <ul class="nav nav-second-level">
-                        <li class="<?php if( $this->uri->segment(1) == 'bonus' ): echo 'class="active"'; endif; ?>">
+                        <li class="<?php if( $this->uri->segment(1) == 'bonus' ): echo 'active'; endif; ?>">
                             <a href="<?php echo site_url('bonus') ?>">Hitung</a>
                         </li>
                         <li>
@@ -61,13 +61,13 @@
                     </ul>
                 </li>
 
-                <li <?php echo in_array( $this->uri->segment(2), array('index','daftar')) ? 'active' : ''; ?>>
+                <li <?php echo in_array( $this->uri->segment(1), array('gaji')) ? 'class="active"' : ''; ?>>
                     <a href="<?php echo site_url('gaji/index') ?>"><i class="fa fa-money"></i> 
                         <span class="nav-label">Gaji</span>
                         <span class="fa arrow"></span>
                     </a>
                     <ul class="nav nav-second-level">
-                        <li>
+                        <li <?php if( $this->uri->segment(1) == 'gaji' ): echo 'class="active"'; endif; ?>>
                             <a href="<?php echo site_url('gaji/daftar') ?>">Daftar</a>
                         </li>
                     </ul>

@@ -28,6 +28,11 @@ class Gaji extends CI_Controller
 			$karyawan = $this->input->post('karyawan');
 			
 			$tahun = substr($this->input->post('bulan'), 0, 4 );
+			$bulan = substr( str_replace( '-', '', $this->input->post('bulan')) , 4 , 2 );
+			$gabungan = $bulan .'-' .$tahun;
+			$this->data['get_bonus'] = $this->gaji->get_bonus( $karyawan,$tahun , $bulan );
+			
+			$tahun = substr($this->input->post('bulan'), 0, 4 );
 			$bulan = substr($this->input->post('bulan'), 5 , 2 );
 
 			$cek_tunjangan = $this->gaji->cek_ketersediaan_tunjangan( $tahun , $bulan , $karyawan );
