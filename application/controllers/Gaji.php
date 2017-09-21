@@ -23,12 +23,21 @@ class Gaji extends CI_Controller
 		//menghitung gaji
 		if ( $this->input->post('hitung_bonus') ) {
 			$this->data['kar_jab'] = $this->db->get_where( 'm_karyawan' , array('id_karyawan' => $this->input->post('karyawan')) );
+
 			$tunjangan = $this->input->post('tunjangan');
 			$potongan  = $this->input->post('potongan');
 			$karyawan = $this->input->post('karyawan');
 			
+			
 			$tahun = substr($this->input->post('bulan'), 0, 4 );
 			$bulan = substr( str_replace( '-', '', $this->input->post('bulan')) , 4 , 2 );
+			//$cek_d_gaji = $this->gaji->cek_ketersediaan_gaji( $karyawan , $tahun , $bulan );
+
+			// if ( $cek_d_gaji->numb_rows() > 0 ) {
+			// 	$this->session->set_flashdata( 'failed', 'Data sudah tersedia');
+			// } else {
+
+			// }
 			$gabungan = $bulan .'-' .$tahun;
 			$this->data['get_bonus'] = $this->gaji->get_bonus( $karyawan,$tahun , $bulan );
 			

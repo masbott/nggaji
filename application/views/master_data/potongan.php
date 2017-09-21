@@ -1,7 +1,8 @@
+
 <div class="col-lg-12">
     <div class="ibox float-e-margins">
         <div class="ibox-title">
-            <h5>Daftar Tunjangan</h5>
+            <h5>Daftar Potongan</h5>
             <div class="ibox-tools">
                 <a class="collapse-link">
                     <i class="fa fa-chevron-up"></i>
@@ -32,23 +33,29 @@
                 <thead>
                     <tr>
                         <th class="text-center">#</th>
-                        <th class="text-center">Nama Tunjangan</th>
+                        <th class="text-center">Nama Potongan</th>
                         <th class="text-center">Nilai</th>                        
                         <th class="text-center">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
-                  <?php $n = 1; foreach( $get_data->result() as $t ): ?>
-                    <tr>
-                      <td class="text-center"><?php echo $n++; ?></td>
-                      <td><?php echo $t->nama_tunjangan ?></td>
-                      <td class="text-right"><?php echo 'Rp. '. number_format( $t->nilai_tunjangan , 2 , ',' , '.' ) ?></td>
-                      <td>
-                          <a href="" class="btn btn-xs btn-primary edit" data-id="<?php echo $t->id_tunjangan ?>"> <i class="fa fa-pencil"></i> Edit </a>
-                          <a href="<?php echo site_url('master_data/tunjangan/delete/'.$t->id_tunjangan) ?>" class="btn btn-xs btn-danger" onclick="return confirm('Yakin akan menghapus data ini?')"> <i class="fa fa-trash"></i> Hapus </a>
-                      </td>
-                    </tr>
-                  <?php endforeach; ?>
+                	<?php $no = 1; if( $get_data->num_rows() > 0 ): ?>
+                		<?php foreach( $get_data->result() as $d ): ?>
+		                	<tr>
+		                		<td class="text-center"><?php echo $no++; ?></td>
+		                		<td><?php echo $d->nama_potongan ?></td>
+		                		<td class="text-right"><?php echo 'Rp. ' . number_format( $d->nilai_potongan , 2 , ',' , '.' ) ?></td>
+		                		<td>
+		                			<a href="" class="btn btn-xs btn-primary edit" data-id="<?php echo $d->id_potongan ?>">
+		                				<i class="fa fa-pencil"></i> Edit
+		                			</a>
+		                			<a href="<?php echo site_url('master_data/potongan/delete/'.$d->id_potongan) ?>" class="btn btn-xs btn-danger" onClick="return confirm('Yakin akan manghapus data ini?')">
+		                				<i class="fa fa-trash"></i> Hapus
+		                			</a>
+		                		</td>
+		                	</tr>
+	                	<?php endforeach; ?>
+                	<?php endif; ?>
                 </tbody>
             </table>
         </div>
@@ -62,15 +69,15 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="myModalLabel">Tambah Tunjangan</h4>
+        <h4 class="modal-title" id="myModalLabel">Tambah Potongan</h4>
       </div>
       <div class="modal-body">
-        <form class="form-horizontal" method="POST" action="<?php echo site_url('master_data/tunjangan') ?>" >
+        <form class="form-horizontal" method="POST" action="<?php echo site_url('master_data/potongan') ?>" >
 
           <div class="form-group">
-            <label for="inputEmail3" class="col-sm-2 control-label">Nama Tunjangan</label>
+            <label for="inputEmail3" class="col-sm-2 control-label">Nama Potongan</label>
             <div class="col-sm-10">
-              <input type="text" class="form-control" name="nama_tunjangan" placeholder="Nama Tunjangan" required="">
+              <input type="text" class="form-control" name="nama_potongan" placeholder="Nama Potongan" required="">
             </div>
           </div>
 
@@ -99,23 +106,23 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="myModalLabel">Edit Tunjangan</h4>
+        <h4 class="modal-title" id="myModalLabel">Edit Potongan</h4>
       </div>
       <div class="modal-body">
-        <form class="form-horizontal" method="POST" action="<?php echo site_url('master_data/tunjangan') ?>" >
+        <form class="form-horizontal" method="POST" action="<?php echo site_url('master_data/potongan') ?>" >
 
           <div class="form-group">
-            <label for="inputEmail3" class="col-sm-2 control-label">Nama Tunjangan</label>
+            <label for="inputEmail3" class="col-sm-2 control-label">Nama Potongan</label>
             <div class="col-sm-10">
-              <input type="text" class="form-control" name="nama_tunjangan" id="nama_tunjangan" placeholder="Nama Tunjangan" required="">
+              <input type="text" class="form-control" name="nama_potongan" id="nama_potongan" placeholder="Nama Tunjangan" required="">
             </div>
           </div>
 
           <div class="form-group">
             <label for="inputPassword3" class="col-sm-2 control-label">Nilai</label>
             <div class="col-sm-10">
-              <input type="text" class="form-control" name="nilai" id="nilai_tunjangan" placeholder="Masukkan Nilai" required="">
-              <input type="hidden" name="id_tunjangan" id="id_tunjangan">
+              <input type="text" class="form-control" name="nilai" id="nilai_potongan" placeholder="Masukkan Nilai" required="">
+              <input type="hidden" name="id_potongan" id="id_potongan">
             </div>
           </div>
         
@@ -132,18 +139,20 @@
 <!-- end modal edit karyawan -->
 <script src="<?php echo base_url(); ?>assets/jquery/jquery-2.1.1.js"></script>
 <script type="text/javascript">
-  $('body').on('click' , '.edit' , function(e){
-    var id = $(this).data('id');
-    e.preventDefault();
-      $.post('<?php echo site_url('master_data/getsatu_tunjangan') ?>',
-              {id:id},
-              function(data){
-                $('#nama_tunjangan').val(data.nama_tunjangan);
-                $('#nilai_tunjangan').val(data.nilai_tunjangan);
-                $('#id_tunjangan').val(data.id_tunjangan);
-                $('#myModaledit').modal('show');
-              }
-            );
-    
-  });
+	$(document).ready(function(){
+		$('body').on('click' , '.edit' , function(e){
+			var id = $(this).data('id');
+			e.preventDefault();
+			$.post('<?php echo site_url('master_data/getOne_potongan') ?>',
+					{id:id},
+					function(data){
+						$('#id_potongan').val(data.id_potongan);
+						$('#nama_potongan').val(data.nama_potongan);
+						$('#nilai_potongan').val(data.nilai_potongan);
+						$('#myModaledit').modal('show');			
+					}
+				  );
+			
+		});
+	});
 </script>

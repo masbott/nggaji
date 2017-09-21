@@ -37,13 +37,13 @@
                     </ul>
                 </li>
 
-                <li <?php echo in_array($this->uri->segment(2), array('jabatan' , 'karyawan' , 'tunjangan' )) ? 'class="active"' : ''; ?>>
+                <li <?php echo in_array($this->uri->segment(2), array( 'tunjangan_karyawan' , 'jabatan' , 'karyawan' , 'tunjangan' , 'potongan' )) ? 'class="active"' : ''; ?>>
                 <a href="index.html"><i class="fa fa-th-large"></i> <span class="nav-label">Master Data</span> <span class="fa arrow"></span></a>
                 <ul class="nav nav-second-level ">
                     <li class="<?php if($this->uri->segment(2) == 'jabatan' ): echo 'active'; endif; ?>"><a href="<?php echo site_url('master_data/jabatan') ?>">Jabatan</a></li>
-                    <li class="<?php if($this->uri->segment(2) == 'karyawan' ): echo 'active'; endif; ?>"><a href="<?php echo site_url('master_data/karyawan') ?>">Karyawan</a></li>
+                    <li class="<?php echo in_array($this->uri->segment(2), array('karyawan' , 'tunjangan_karyawan' ) ) ? 'active' : ''; ?>"><a href="<?php echo site_url('master_data/karyawan') ?>">Karyawan</a></li>
                     <li class="<?php if($this->uri->segment(2) == 'tunjangan' ): echo 'active'; endif; ?>"><a href="<?php echo site_url('master_data/tunjangan') ?>">Tunjangan</a></li>
-                    <li class="<?php if($this->uri->segment(2) == 'potongan' ): echo 'active'; endif; ?>"><a href="">Potongan</a></li>
+                    <li class="<?php if($this->uri->segment(2) == 'potongan' ): echo 'active'; endif; ?>"><a href="<?php echo site_url('master_data/potongan') ?>">Potongan</a></li>
                 </ul>
             </li>
 
@@ -73,6 +73,15 @@
                     </ul>
                 </li>
 
+            <?php endif; ?>
+
+            <?php if( $this->session->userdata('level') == '3' ): ?>
+            	<li <?php echo in_array($this->uri->segment(2), array( 'kriteria' , 'nilai_kriteria' )) ? 'class="active"' : ''; ?>>
+                <a href="index.html"><i class="fa fa-th-large"></i> <span class="nav-label">Master Data</span> <span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level ">
+                    <li class="<?php if($this->uri->segment(2) == 'kriteria' ): echo 'active'; endif; ?>"><a href="<?php echo site_url('master_data/kriteria') ?>">Kriteria</a></li>
+                    <li class="<?php if($this->uri->segment(2) == 'nilai_kriteria' ): echo 'active'; endif; ?>"><a href="<?php echo site_url('master_data/nilai_kriteria') ?>">Nilai Kriteria</a></li>
+                </ul>
             <?php endif; ?>
         </ul>
     </div>

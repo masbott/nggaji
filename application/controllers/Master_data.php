@@ -314,9 +314,11 @@ class Master_data extends CI_Controller
 			$karyawan = $this->input->post('id_karyawan');
 			$tunjangan = $this->input->post('tunjangan');
 			$potongan = $this->input->post('potongan');
+			
+			$this->db->where( 'id_karyawan', $id)->delete( 'd_karyawan_tunjangan' );
 			if ( $cek->num_rows() > 0 ) {
 				//update
-				$this->db->where( 'id_karyawan', $id)->delete( 'd_karyawan_tunjangan' );
+				
 				for ($i=0; $i < count( $this->input->post('tunjangan')) ; $i++) { 
 					$update = array( 
 										'id_karyawan' => $karyawan, 
@@ -368,5 +370,59 @@ class Master_data extends CI_Controller
 		$this->data['sub'] = [ 'title' => ucwords( strtolower( str_replace('_', ' ', __CLASS__) ) ) , 'sub_title' => ucwords( str_replace('_', ' ',  strtolower( __FUNCTION__ ) )  ) ];
 		$this->data['content'] = 'master_data/tunjangan_karyawan';
 		$this->load->view( 'layout/main', $this->data );	
+	}
+
+	function potongan( $param = null , $key = null ) {
+		if ( $this->input->post('submit') ) {
+			$insert = array(
+								'nama_potongan' => $this->input->post('nama_potongan'),
+								'nilai_potongan' => $this->input->post('nilai')
+							);
+
+			$this->db->insert( 'm_potongan', $insert );
+			$this->session->set_flashdata( 'success', 'Berhasil menyimpan data.');
+			redirect( 'master_data/potongan' );
+		}
+
+		if ( $param == 'delete' ) {
+			$this->db->where( 'm_potongan.id_potongan', $key)->delete( 'm_potongan' );
+			$this->session->set_flashdata( 'success', 'Berhasil menghapus data.');
+			redirect( 'master_data/potongan' );	
+		}
+
+		if ( $this->input->post('submit_edit') ) {
+			$edit = array(
+							'nama_potongan' => $this->input->post('nama_potongan'),
+							'nilai_potongan' => $this->input->post('nilai')
+						);
+			$this->db->where( 'm_potongan.id_potongan', $this->input->post('id_potongan'))->update( 'm_potongan' , $edit );
+			$this->session->set_flashdata( 'success', 'Berhasil menyimpan data.');
+			redirect( 'master_data/potongan' );
+		}
+		$this->data['get_data'] = $this->db->get( 'm_potongan' );
+		$this->data['sub'] = [ 'title' => ucwords( strtolower( str_replace('_', ' ', __CLASS__ ) ) ) , 'sub_title' => ucwords( strtolower( str_replace('_', ' ', __FUNCTION__ ) ) ) ];
+
+		$this->data['content'] = 'master_data/potongan';
+		$this->load->view( 'layout/main', $this->data );
+	}
+
+	function getOne_potongan() {
+		$return = array();
+
+		if ( $this->input->post() ) {
+			$id = $this->input->post('id');
+
+			$get = $this->db->get_where( 'm_potongan' , array('id_potongan' => $id ) );
+
+			$return = array(
+								'id_potongan' => $get->row()->id_potongan,
+								'nama_potongan' => $get->row()->nama_potongan,
+								'nilai_potongan' => $get->row()->nilai_potongan
+							);
+		}
+
+		header("Content-type:application/json");
+		echo json_encode($return);
+
 	}
 }

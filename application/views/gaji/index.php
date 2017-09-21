@@ -21,7 +21,7 @@
             </div>
         </div>
         <div class="ibox-content">
-            <form class="form-horizontal" method="POST" action="" id="form_bonus">
+            <form class="form-horizontal" method="POST" action="" id="form_gaji">
               <div class="form-group">
                 <label for="inputEmail3" class="col-sm-2 control-label pull-left">Karyawan</label>
                 <div class="col-sm-10">
@@ -40,7 +40,7 @@
                 <div class="col-sm-10">
                   <input type="text" class="form-control" id="inputPassword3" readonly="" value="<?php echo date_translate(date('F Y' , strtotime(date('d-m-Y')))) ?>">
                   <input type="hidden" name="bulan" value="<?php echo date('Y-m-d H:i:s'); ?>">
-                  <input type="submit" class="btn btn-sm btn-primary" name="hitung_bonus" value="Hitung" style="margin-top: 10px;">
+                  <input type="submit" class="btn btn-sm btn-primary btn_hitung" name="hitung_bonus" value="Hitung" style="margin-top: 10px;">
                   <input type="hidden" name="id_karyawan">
                 </div>
               </div>
@@ -88,7 +88,7 @@
             </div>
         </div>
         <div class="ibox-content">
-            <table class="table table-striped">
+            <table class="table table-striped" id="gaji">
                     <thead>
                         <tr>
                             <td width="20%">NIK</td>
@@ -114,22 +114,20 @@
                             <td colspan="6"></td>
                         </tr>
 
-
-                        <tr>
-                            <td>Gaji Pokok</td>
-                            <td>:</td>
+                        
+                        <tr style="background-color: #F3F3F4;">
+                            <td colspan="5">Gaji Pokok</td>
                             <td class="text-right"><?php echo isset( $getone_jabatan ) ? 'Rp. ' .'<strong>' . number_format( $getone_jabatan->row()->gaji_pokok , 2 , ',' , '.' ) . '<strong>' : ''; ?></td>
                         </tr>
                         <tr>
-                            <td>Tunjangan</td>
-                            <td colspan="2"></td>
+                            <td colspan="5">Tunjangan</td>
+                            <td colspan="5"></td>
                         </tr>
                         <?php if( $get_tunjangan_karyawan->num_rows() > 0 ): ?>
                             <?php $jumlah_tunjangan = 0; ?>
                             <?php foreach( $get_tunjangan_karyawan->result() as $karyawan_tunjangan ): ?>
                                 <tr>
-                                    <td><?php echo $karyawan_tunjangan->nama_tunjangan ?></td>
-                                    <td>:</td>
+                                    <td colspan="5"><?php echo $karyawan_tunjangan->nama_tunjangan ?></td>
                                     <td class="text-right"><?php echo 'Rp. '. number_format( $karyawan_tunjangan->nilai_tunjangan , 2 , ',' , '.' ) ?></td>
                                     <?php $jumlah_tunjangan += $karyawan_tunjangan->nilai_tunjangan; ?>
                                 </tr>
@@ -137,38 +135,36 @@
                         <?php else: ?>
 
                         <?php endif; ?>
-                        <tr>
-                            <td colspan="2"></td>
+                        <tr style="background-color: #F3F3F4;">
+                            <td colspan="5">Jumlah Tunjangan</td>
                             <td class="text-right"><?php echo 'Rp. '. '<strong>'. number_format( $jumlah_tunjangan , 2 , ',' , '.' ). '</strong>'; ?></td>
                         </tr>
 
                         <tr>
-                            <td>Potongan</td>
-                            <td colspan="2"></td>
+                            <td colspan="5">Potongan</td>
+                            <td colspan="5"></td>
                         </tr>
                         <?php $jumlah_potongan = 0; ?>
                         <?php if( $get_potongan_karyawan->num_rows() > 0 ): ?>
                             <?php foreach( $get_potongan_karyawan->result() as $p ): ?>
                                 <tr>
-                                    <td><?php echo $p->nama_potongan ?></td>
-                                    <td>:</td>
+                                    <td colspan="5"><?php echo $p->nama_potongan ?></td>
                                     <td class="text-right"><?php echo 'Rp. ' . number_format( $p->nilai_potongan , 2 , ',' , '.' ); ?></td>
                                     <?php $jumlah_potongan += $p->nilai_potongan; ?>
                                 </tr>
                             <?php endforeach; ?>
                         <?php endif; ?>
-                        <tr>
-                            <td colspan="2"></td>
+                        <tr style="background-color: #F3F3F4;">
+                            <td colspan="5">Jumlah Potongan</td>
                             <td class="text-right"><?php echo 'Rp. '. '<strong>' . number_format( $jumlah_potongan , 2 , ',' , '.' ) . '</strong>'; ?></td>
                         </tr>
 
                         <tr>
                             <td>Bonus</td>
-                            <td colspan="2"></td>
+                            <td colspan="5"></td>
                         </tr>
-                        <tr>
+                        <tr style="background-color: #F3F3F4;">
                             <td>Jumlah Bonus</td>
-                            <td>:</td>
                             <?php if( $get_bonus->num_rows() > 0 ): ?>
                             <?php 
                                 $bonus = $get_bonus->row()->jumlah; 
@@ -176,13 +172,12 @@
                                 $bonus = 0;
                             ?>
                             <?php endif; ?>
-                            <td class="text-right"><?php echo 'Rp. <strong>' . number_format( $bonus , 2 , ',' , '.' ) . '</strong>'; ?></td>
+                            <td colspan="5" class="text-right"><?php echo 'Rp. <strong>' . number_format( $bonus , 2 , ',' , '.' ) . '</strong>'; ?></td>
                         </tr>
 
                         <tr>
-                            <td><strong>Total Gaji</strong></td>
-                            <td>:</td>
-                            <td class="text-right"><?php echo 'Rp. <strong> ' .number_format( ($getone_jabatan->row()->gaji_pokok + $jumlah_tunjangan - $jumlah_potongan + $bonus ) , 2 , ',' , '.' ) . '</strong>'; ?></td>
+                            <td colspan="5"><strong>Total Gaji</strong> (<i> Gaji Pokok + Jumlah Tunjangan  - Jumlah Potongan + Jumlah Bonus </i>)</td>
+                            <td class="text-right total_gaji" data-nilai="<?php echo ($getone_jabatan->row()->gaji_pokok + $jumlah_tunjangan - $jumlah_potongan + $bonus ) ; ?>"><?php echo 'Rp. <strong> ' .number_format( ($getone_jabatan->row()->gaji_pokok + $jumlah_tunjangan - $jumlah_potongan + $bonus ) , 2 , ',' , '.' ) . '</strong>'; ?></td>
                         </tr>
 
                     </thead>
@@ -192,3 +187,9 @@
     </div>
 </div>
 <?php endif; ?>
+<script src="<?php echo base_url(); ?>assets/jquery/jquery-2.1.1.js"></script>
+<script type="text/javascript">
+    $('body').on('submit' , '#form_gaji' , function(e){
+        var data_gaji = $('#gaji').data('nilai');
+    });
+</script>

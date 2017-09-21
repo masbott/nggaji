@@ -45,4 +45,8 @@ class M_gaji extends CI_Model
 		return $this->db->query("SELECT * FROM d_bonus WHERE id_karyawan=$id_karyawan AND YEAR(bulan) = $tahun AND MONTH(bulan) = $bulan ");
 	}
 
+	function cek_ketersediaan_gaji( $karyawan , $tahun , $bulan ) {
+		return $this->db->query("SELECT * FROM d_gaji WHERE id_karyawan=$id_karyawan YEAR(bulan) = $tahun AND MONTH(bulan) = $bulan ");
+	}
+
 }
