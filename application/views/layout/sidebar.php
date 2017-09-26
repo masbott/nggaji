@@ -76,11 +76,14 @@
             <?php endif; ?>
 
             <?php if( $this->session->userdata('level') == '3' ): ?>
-            	<li <?php echo in_array($this->uri->segment(2), array( 'kriteria' , 'nilai_kriteria' )) ? 'class="active"' : ''; ?>>
+            	<li <?php echo in_array($this->uri->segment(2), array( 'kriteria' , 'nilai_kriteria' , 'umr' )) ? 'class="active"' : ''; ?>>
                 <a href="index.html"><i class="fa fa-th-large"></i> <span class="nav-label">Master Data</span> <span class="fa arrow"></span></a>
                 <ul class="nav nav-second-level ">
                     <li class="<?php if($this->uri->segment(2) == 'kriteria' ): echo 'active'; endif; ?>"><a href="<?php echo site_url('master_data/kriteria') ?>">Kriteria</a></li>
                     <li class="<?php if($this->uri->segment(2) == 'nilai_kriteria' ): echo 'active'; endif; ?>"><a href="<?php echo site_url('master_data/nilai_kriteria') ?>">Nilai Kriteria</a></li>
+                    <li>
+                        <a href="<?php echo site_url('master_data/umr') ?>">UMR</a>
+                    </li>
                 </ul>
             <?php endif; ?>
         </ul>

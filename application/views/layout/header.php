@@ -13,5 +13,6 @@
     <link href="<?php echo base_url() ?>assets/plugin/css/custom.css" rel="stylesheet">
     <link href="<?php echo base_url() ?>assets/custome/css/animate.css" rel="stylesheet">
     <link href="<?php echo base_url() ?>assets/custome/css/style.css" rel="stylesheet">
+    <link href="<?php echo base_url() ?>assets/datepicker/css/bootstrap-datepicker.css" rel="stylesheet">
 
 </head>

@@ -15,7 +15,14 @@ class Master_data extends CI_Controller
 		$this->load->model('m_master_data' , 'master_data' );
 		//tambah data karyawan
 		if ( $this->input->post('submit') ) {
-			$karyawan = array( 
+			
+			$cek = $this->db->get_where( 'm_karyawan' , array( 'NIK' => $this->input->post('nik') ) );
+
+			if ( $cek->num_rows() == 1 ) {
+				$this->session->set_flashdata( 'failed', 'Gagal menginputkan data.');
+				redirect( 'master_data/karyawan' );
+			} else {
+				$karyawan = array( 
 								 'NIK' 				=> $this->input->post('nik'), 
 								 'nama_karyawan' 	=> $this->input->post('nama_karyawan'),
 								 'jenis_kelamin'	=> $this->input->post('jenis_kelamin'),
@@ -23,7 +30,9 @@ class Master_data extends CI_Controller
 								 'alamat'			=> $this->input->post('alamat'),
 								 'id_jabatan'		=> $this->input->post('jabatan')
 							 );
-			$this->db->insert( 'm_karyawan', $karyawan );
+				$this->db->insert( 'm_karyawan', $karyawan );
+			}
+			
 			$last_id = $this->db->insert_id();
 			//print_r($last_id);exit();
 			$tunjangan = $this->input->post('tunjangan');
@@ -424,5 +433,28 @@ class Master_data extends CI_Controller
 		header("Content-type:application/json");
 		echo json_encode($return);
 
+	}
+
+	function umr() {
+		if ( $this->input->post('submit_edit') ) {
+			$data = array('nilai' => $this->input->post('nilai'));
+			$param = array('nama' => 'umr');
+			$this->db->where($param)->update('m_pengaturan' , $data);
+			$this->session->set_flashdata( 'success', 'Berhasil menyimpan data');
+			redirect( 'master_data/umr' );
+		}
+		$this->data['data'] = $this->db->get_where('m_pengaturan' , array('nama' => 'umr'));
+		$this->data['sub'] = [ 'title' => ucwords( strtolower( str_replace('_', ' ', __CLASS__ ) ) ) , 'sub_title' => strtoupper(str_replace('_', ' ', __FUNCTION__ )) ];
+		$this->data['content'] = 'master_data/umr';
+		$this->load->view( 'layout/main', $this->data );
+	}
+
+	function get_umr() {
+			$get = $this->db->get_where( 'm_pengaturan' , array('nama' => 'umr' ) );
+			$return = array(
+								'nilai' => $get->row()->nilai
+							);
+		header("Content-type:application/json");
+		echo json_encode($return);
 	}
 }

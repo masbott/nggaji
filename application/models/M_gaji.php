@@ -46,7 +46,13 @@ class M_gaji extends CI_Model
 	}
 
 	function cek_ketersediaan_gaji( $karyawan , $tahun , $bulan ) {
-		return $this->db->query("SELECT * FROM d_gaji WHERE id_karyawan=$id_karyawan YEAR(bulan) = $tahun AND MONTH(bulan) = $bulan ");
+		return $this->db->query("SELECT * FROM d_gaji WHERE id_karyawan=$id_karyawan YEAR(bulan) = '".$tahun."'  AND MONTH(bulan) = '".$bulan."' ");
+	}
+
+	function data_gaji( $tahun = null , $bulan = null ) {
+		return $this->db->query("SELECT a.* , b.*
+			                     FROM d_gaji a 
+			                     INNER JOIN m_karyawan b ON a.id_karyawan = b.id_karyawan WHERE YEAR(bulan) = '$tahun' AND MONTH(bulan) = '$bulan' ");
 	}
 
 }

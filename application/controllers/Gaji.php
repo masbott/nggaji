@@ -31,13 +31,7 @@ class Gaji extends CI_Controller
 			
 			$tahun = substr($this->input->post('bulan'), 0, 4 );
 			$bulan = substr( str_replace( '-', '', $this->input->post('bulan')) , 4 , 2 );
-			//$cek_d_gaji = $this->gaji->cek_ketersediaan_gaji( $karyawan , $tahun , $bulan );
-
-			// if ( $cek_d_gaji->numb_rows() > 0 ) {
-			// 	$this->session->set_flashdata( 'failed', 'Data sudah tersedia');
-			// } else {
-
-			// }
+			
 			$gabungan = $bulan .'-' .$tahun;
 			$this->data['get_bonus'] = $this->gaji->get_bonus( $karyawan,$tahun , $bulan );
 			
@@ -58,6 +52,34 @@ class Gaji extends CI_Controller
 		$this->load->view( 'layout/main', $this->data );
 	}
 
+	function simpan_gaji() {
+		$return = array();
+
+		if ( $this->input->post() ) {
+			$cek = $this->db->get_where( 'd_gaji' , array( 'bulan' => date('Y-m-d' , strtotime( $this->input->post('periode') ) ) , 
+			                                                'id_karyawan' => $this->input->post('id_karyawan') ) );
+
+			if ( $cek->num_rows() > 0 ) {
+				$return = array( 
+									'status' => 'false',
+									'bulan' => date('Y-m-d' , strtotime( $this->input->post('periode') ))
+								 );
+			} else {
+				$masuk = array( 'id_karyawan' => $this->input->post('id_karyawan') ,
+							'bulan' => date('Y-m-d' , strtotime( $this->input->post('periode') ) ),
+							'total_gaji' => $this->input->post('total_gaji')
+		                  );
+				$this->db->insert( 'd_gaji', $masuk );
+				$return = array( 
+									'status' => 'true' ,
+									'bulan' => date('Y-m-d' , strtotime( $this->input->post('periode') ))
+								 );
+			}
+		}
+		header("Content-type:application/json");
+		echo json_encode($return);
+	}
+
 	function get_tunjangan() {
 		$return = array();
 		if ( $this->input->post() ) {
@@ -70,9 +92,15 @@ class Gaji extends CI_Controller
 	}
 
 	function daftar() {
-		$tunjangan = $this->db->get( 'd_tunjangan' );
-		$potongan  = $this->db->get( 'd_potongan' );
-
+		$this->load->model('m_gaji' , 'gaji' );
+		// $bulan = '';
+		// $tahun = '';
+		if ( $this->input->post('btn_lihat') ) {
+			list( $bulan , $tahun ) = explode( '/', $this->input->post('periode'));
+			// echo $bulan. ' - ' . $tahun;exit();
+			$this->data['gaji'] = $this->gaji->data_gaji( $tahun , $bulan );
+		}
+		// $this->data['gaji'] = $this->gaji->data_gaji();
 		$this->data['sub'] = ['title' => __CLASS__ , 'sub_title' => ucwords( strtolower( __FUNCTION__ ) ) . ' '.  __CLASS__ ];
 		$this->data['content'] = 'gaji/daftar';
 		$this->load->view( 'layout/main', $this->data );

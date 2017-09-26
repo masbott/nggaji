@@ -25,6 +25,11 @@
                 <i class="fa fa-plus"></i>
                 Tambah
             </button>
+
+            <?php if( $this->session->flashdata('failed') ): ?>
+                <div class="alert alert-danger" role="alert"><strong>Sukses!</strong> <?php echo $this->session->flashdata('failed'); ?></div>
+            <?php endif; ?>
+
             <?php if( $this->session->flashdata('success') ): ?>
                 <div class="alert alert-success" role="alert"><strong>Sukses!</strong> <?php echo $this->session->flashdata('success'); ?></div>
             <?php endif; ?>

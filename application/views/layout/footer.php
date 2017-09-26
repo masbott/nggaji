@@ -28,6 +28,7 @@
 
 <!-- Peity -->
 <script src="<?php echo base_url(); ?>assets/plugin/js/peity-demo.js"></script>
+<script src="<?php echo base_url(); ?>assets/datepicker/js/bootstrap-datepicker.js"></script>
 
 <script>
     $(document).ready(function(){
@@ -35,6 +36,15 @@
             checkboxClass: 'icheckbox_square-green',
             radioClass: 'iradio_square-green',
         });
+    });
+</script>
+
+<script type="text/javascript">
+    $('.datepicker').datepicker({
+        format: "mm/yyyy",
+        autoclose: true,
+        viewMode: "months", 
+        minViewMode: "months"
     });
 </script>
 

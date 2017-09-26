@@ -21,7 +21,23 @@
             </div>
         </div>
         <div class="ibox-content">
-
+            <form action="" method="POST">
+                <table class="table table-striped">
+                    <tr>
+                        <td>Per Bulan / Tahun</td>
+                        <td>:</td>
+                        <td>
+                            <input type="text" name="periode" class="form-control datepicker">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2"></td>
+                        <td>
+                            <input type="submit" class="btn btn-sm btn-primary" name="btn_lihat" value="Lihat">
+                        </td>
+                    </tr>
+                </table>
+            </form>
             <table class="table table-striped table-bordered">
                 <thead>
                     <tr>
@@ -33,6 +49,26 @@
                     </tr>
                 </thead>
                 <tbody>
+                    <?php $this->load->model('m_gaji' , 'gaji' ); if( $this->input->post('btn_lihat') ): ?>
+
+                        <?php 
+                         list( $bulan , $tahun ) = explode( '/', $this->input->post('periode'));
+                         $gaji =  $this->gaji->data_gaji( $tahun , $bulan );
+                        ?>
+                        <?php $no = 1; foreach( $gaji->result() as $g ): ?>
+                            <tr>
+                                <td class="text-center"><?php echo $no++ ?></td>
+                                <td><?php echo $g->NIK ?></td>
+                                <td><?php echo $g->nama_karyawan ?></td>
+                                <td><?php echo date_translate(date('F Y' , strtotime( $g->bulan )))  ?></td>
+                                <td class="text-right"><?php echo 'Rp.' . number_format( $g->total_gaji , 2 , ',' , '.' ) ?></td>
+                            </tr>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <tr>
+                            <td colspan="5">SILAHKAN PILIH BULAN TERLEBIH DAHULU</td>
+                        </tr>
+                    <?php endif; ?>
                 </tbody>
             </table>
         </div>
